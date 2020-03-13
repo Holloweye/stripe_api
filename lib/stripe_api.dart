@@ -124,11 +124,27 @@ class CustomerSession {
   ///
   ///
   ///
-  Future<Source> addCustomerSource(String sourceId) async {
-    final key = await _keyManager.retrieveEphemeralKey();
-    final source = await _apiHandler.addCustomerSource(
-        key.customerId, sourceId, key.secret);
-    return source;
+  Future<Source> addCustomerSource(
+    String sourceId, {
+    String customerId,
+    String secret,
+  }) async {
+    if (customerId != null && secret != null) {
+      final source = await _apiHandler.addCustomerSource(
+        customerId,
+        sourceId,
+        secret,
+      );
+      return source;
+    } else {
+      final key = await _keyManager.retrieveEphemeralKey();
+      final source = await _apiHandler.addCustomerSource(
+        key.customerId,
+        sourceId,
+        key.secret,
+      );
+      return source;
+    }
   }
 
   ///
