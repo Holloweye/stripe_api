@@ -150,11 +150,27 @@ class CustomerSession {
   ///
   ///
   ///
-  Future<bool> deleteCustomerSource(String sourceId) async {
-    final key = await _keyManager.retrieveEphemeralKey();
-    final deleted = await _apiHandler.deleteCustomerSource(
-        key.customerId, sourceId, key.secret);
-    return deleted;
+  Future<bool> deleteCustomerSource(
+    String sourceId, {
+    String customerId,
+    String secret,
+  }) async {
+    if (customerId != null && secret != null) {
+      final deleted = await _apiHandler.deleteCustomerSource(
+        customerId,
+        sourceId,
+        secret,
+      );
+      return deleted;
+    } else {
+      final key = await _keyManager.retrieveEphemeralKey();
+      final deleted = await _apiHandler.deleteCustomerSource(
+        key.customerId,
+        sourceId,
+        key.secret,
+      );
+      return deleted;
+    }
   }
 
   ///
